@@ -10,6 +10,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"hugotranslationstudy/internal/piglatin"
+
 	"github.com/gohugoio/hugo/parser/pageparser"
 	"gopkg.in/yaml.v3"
 )
@@ -163,7 +165,7 @@ func translateBodyUsingRanges(jsonPath string) string {
 		}
 
 		original := string(body[span.Start:span.End])
-		translated := toPigLatin(original)
+		translated := piglatin.ToPigLatin(original)
 
 		before := append([]byte(nil), body[:span.Start]...)
 		after := append([]byte(nil), body[span.End:]...)

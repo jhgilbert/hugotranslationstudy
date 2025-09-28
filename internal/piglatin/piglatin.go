@@ -1,4 +1,4 @@
-package main
+package piglatin
 
 import (
 	"strings"
@@ -42,7 +42,7 @@ func pigWord(word string) string {
 }
 
 // toPigLatin converts an entire string, word by word, to Pig Latin.
-func toPigLatin(s string) string {
+func ToPigLatin(s string) string {
 	words := strings.FieldsFunc(s, func(r rune) bool {
 		return !unicode.IsLetter(r)
 	})
