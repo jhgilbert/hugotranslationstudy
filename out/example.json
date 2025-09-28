@@ -12,39 +12,27 @@
   "contentTokens": [
     {
       "type": "tText",
-      "val": "\nHello **world**!\n\nHere is a shortcode:\n\n",
-      "start": 0,
-      "end": 41
+      "val": "\nHello **world**!\n\nHere is a shortcode:\n\n"
     },
     {
       "type": "tLeftDelimScNoMarkup",
-      "val": "{{\u003c",
-      "start": 41,
-      "end": 44
+      "val": "{{\u003c"
     },
     {
       "type": "tScName",
-      "val": "note",
-      "start": 45,
-      "end": 49
+      "val": "note"
     },
     {
       "type": "tScParam",
-      "val": "Remember to drink water",
-      "start": 51,
-      "end": 74
+      "val": "Remember to drink water"
     },
     {
       "type": "tRightDelimScNoMarkup",
-      "val": "\u003e}}",
-      "start": 76,
-      "end": 79
+      "val": "\u003e}}"
     },
     {
       "type": "tText",
-      "val": "\n\nMore text after the shortcode.\n",
-      "start": 79,
-      "end": 112
+      "val": "\n\nMore text after the shortcode.\n"
     }
   ],
   "contentTextSpans": [

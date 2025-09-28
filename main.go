@@ -16,21 +16,12 @@ import (
 )
 
 /*
-Round trip + .mdoc with proper shortcode pairing:
-1) Parse content/example.md (front matter + body).
-2) Emit out/example.json with tokens and byte ranges for text.
-3) Read that JSON back.
-4) Translate: uppercase all text spans (by byte ranges).
-5) Write translated Markdown: content/example.translated.md
-6) Convert translated body to .mdoc shortcode syntax (paired vs standalone) and write:
-   content/example.translated.mdoc
+A token created by Hugo's pageparser package. For example,
+the opening punctuation of a shortcode becomes a token.
 */
-
 type Token struct {
 	Type  string `json:"type"`
 	Val   string `json:"val"`
-	Start int    `json:"start"` // byte offset into contentRaw
-	End   int    `json:"end"`   // byte offset (exclusive)
 }
 
 type TextSpan struct {
@@ -113,8 +104,6 @@ func parseAndWriteJSON(srcPath, outDir string) (string, Output) {
 		tok := Token{
 			Type:  item.Type.String(),
 			Val:   val,
-			Start: start,
-			End:   end,
 		}
 		bodyTokens = append(bodyTokens, tok)
 
