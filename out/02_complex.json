@@ -1,0 +1,880 @@
+{
+  "sourcePath": "content/02_complex.md",
+  "frontMatter": {
+    "draft": false,
+    "tags": [
+      "demo",
+      "shortcodes",
+      "edge-cases"
+    ],
+    "title": "Everything Bagel: Complex Conversion Test"
+  },
+  "contentRaw": "\nThis document stress-tests **shortcodes** and Markdown. See the [reference link][1] and this inline link to [Hugo](https://gohugo.io).\n\n\u003e A blockquote with a shortcode inside:\n\u003e\n\u003e {{\u003c badge text=\"QUOTE\" color=\"purple\" \u003e}} and some **bold** text.\n\n---\n\n## 1. Standalone / open-only shortcodes (angle \u0026 percent)\n\nPlain paragraph before.\n\n{{\u003c note \"Stay hydrated\" \u003e}}\n\nInline usage: Text before {{\u003c badge text=\"INLINE\" color=\"blue\" \u003e}} and after.\n\nPercent variant standalone:  \n{{% tag name=\"alone\" foo=\"bar\" %}}\n\nOdd spacing:  \n{{\u003c            spacer            \u003e}}\n\nBack-to-back:  \n{{\u003c badge text=\"ONE\" \u003e}}{{\u003c badge text=\"TWO\" \u003e}}\n\n---\n\n## 2. Paired shortcodes (angle \u0026 percent) with bodies\n\nAngle with body:\n\n{{\u003c box title=\"Important Box\" \u003e}}\nThis **inside** text should be preserved verbatim.\n{{\u003c /box \u003e}}\n\nPercent with body (Markdown-enabled):\n\n{{% admonition type=\"tip\" %}}\nYou can put **Markdown** here, including a list:\n\n- Item A (with inline {{\u003c badge text=\"A\" \u003e}})\n- Item B\n- Item C\n\nAnd a reference style link to the [Docs][1].\n{{% /admonition %}}\n\nOddly spaced closing (should still pair):\n\n{{\u003c wrapper \u003e}}\nWrapped body content with _italics_ and `inline code`.\n{{\u003c     /     wrapper    \u003e}}\n\n---\n\n## 3. Nested shortcodes\n\nTabs with nested tab children:\n\n{{\u003c tabs \u003e}}\n{{\u003c tab name=\"First\" \u003e}}\nFirst tab body with an inline {{\u003c badge text=\"FIRST\" \u003e}} badge.\n{{\u003c /tab \u003e}}\n\n{{\u003c tab name=\"Second\" \u003e}}\nSecond tab body.\n\nNested box:\n{{\u003c box title=\"Nested\" \u003e}}\nDeep content.\n{{\u003c /box \u003e}}\n{{\u003c /tab \u003e}}\n{{\u003c /tabs \u003e}}\n\nMixed delimiters (percent outer, angle inner):\n\n{{% panel header=\"Mixed\" %}}\nInside panel with a nested angle shortcode:\n{{\u003c icon name=\"sparkles\" \u003e}}\n{{% /panel %}}\n\n---\n\n## 4. Lists, reference links, images, and tables\n\nA regular list with inline shortcodes:\n\n- Before {{\u003c badge text=\"LIST\" color=\"orange\" \u003e}} after.\n- A second bullet with **bold** and `code`.\n\nA nested list with block content:\n\n- Parent\n  - Child with standalone shortcode:\n    {{\u003c feature enabled=\"true\" \u003e}}\n\nReference-style links and images:\n\nHere is a reference link to the [documentation][1], and a reference image:  \n![Scenic Pic][hero-img]\n\nA simple table:\n\n| Feature   | Value                   |\n| --------- | ----------------------- |\n| Bold      | **yes**                 |\n| Shortcode | {{\u003c badge text=\"OK\" \u003e}} |\n| Link      | [Hugo][1]               |\n\n---\n\n## 5. Code fences \u0026 inline code (should be untouched)\n\nInline code like `{{\u003c not-a-shortcode \u003e}}` must **not** be converted.\n\n```go\n// A fenced code block that *looks* like shortcodes but isn't:\nfmt.Println(\"{{\u003c fake shortcode \u003e}} should remain as-is\")\n```\n\n[1]: https://www.google.com\n",
+  "contentTokens": [
+    {
+      "type": "tText",
+      "val": "\nThis document stress-tests **shortcodes** and Markdown. See the [reference link][1] and this inline link to [Hugo](https://gohugo.io).\n\n\u003e A blockquote with a shortcode inside:\n\u003e\n\u003e "
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "badge"
+    },
+    {
+      "type": "tScParam",
+      "val": "text"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "QUOTE"
+    },
+    {
+      "type": "tScParam",
+      "val": "color"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "purple"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": " and some **bold** text.\n\n---\n\n## 1. Standalone / open-only shortcodes (angle \u0026 percent)\n\nPlain paragraph before.\n\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "note"
+    },
+    {
+      "type": "tScParam",
+      "val": "Stay hydrated"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n\nInline usage: Text before "
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "badge"
+    },
+    {
+      "type": "tScParam",
+      "val": "text"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "INLINE"
+    },
+    {
+      "type": "tScParam",
+      "val": "color"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "blue"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": " and after.\n\nPercent variant standalone:  \n"
+    },
+    {
+      "type": "tLeftDelimScWithMarkup",
+      "val": "{{%"
+    },
+    {
+      "type": "tScName",
+      "val": "tag"
+    },
+    {
+      "type": "tScParam",
+      "val": "name"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "alone"
+    },
+    {
+      "type": "tScParam",
+      "val": "foo"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "bar"
+    },
+    {
+      "type": "tRightDelimScWithMarkup",
+      "val": "%}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n\nOdd spacing:  \n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "spacer"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n\nBack-to-back:  \n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "badge"
+    },
+    {
+      "type": "tScParam",
+      "val": "text"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "ONE"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "badge"
+    },
+    {
+      "type": "tScParam",
+      "val": "text"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "TWO"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n\n---\n\n## 2. Paired shortcodes (angle \u0026 percent) with bodies\n\nAngle with body:\n\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "box"
+    },
+    {
+      "type": "tScParam",
+      "val": "title"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "Important Box"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\nThis **inside** text should be preserved verbatim.\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScClose",
+      "val": "/"
+    },
+    {
+      "type": "tScName",
+      "val": "box"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n\nPercent with body (Markdown-enabled):\n\n"
+    },
+    {
+      "type": "tLeftDelimScWithMarkup",
+      "val": "{{%"
+    },
+    {
+      "type": "tScName",
+      "val": "admonition"
+    },
+    {
+      "type": "tScParam",
+      "val": "type"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "tip"
+    },
+    {
+      "type": "tRightDelimScWithMarkup",
+      "val": "%}}"
+    },
+    {
+      "type": "tText",
+      "val": "\nYou can put **Markdown** here, including a list:\n\n- Item A (with inline "
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "badge"
+    },
+    {
+      "type": "tScParam",
+      "val": "text"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "A"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": ")\n- Item B\n- Item C\n\nAnd a reference style link to the [Docs][1].\n"
+    },
+    {
+      "type": "tLeftDelimScWithMarkup",
+      "val": "{{%"
+    },
+    {
+      "type": "tScClose",
+      "val": "/"
+    },
+    {
+      "type": "tScName",
+      "val": "admonition"
+    },
+    {
+      "type": "tRightDelimScWithMarkup",
+      "val": "%}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n\nOddly spaced closing (should still pair):\n\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "wrapper"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\nWrapped body content with _italics_ and `inline code`.\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScClose",
+      "val": "/"
+    },
+    {
+      "type": "tScName",
+      "val": "wrapper"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n\n---\n\n## 3. Nested shortcodes\n\nTabs with nested tab children:\n\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "tabs"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "tab"
+    },
+    {
+      "type": "tScParam",
+      "val": "name"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "First"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\nFirst tab body with an inline "
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "badge"
+    },
+    {
+      "type": "tScParam",
+      "val": "text"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "FIRST"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": " badge.\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScClose",
+      "val": "/"
+    },
+    {
+      "type": "tScName",
+      "val": "tab"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "tab"
+    },
+    {
+      "type": "tScParam",
+      "val": "name"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "Second"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\nSecond tab body.\n\nNested box:\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "box"
+    },
+    {
+      "type": "tScParam",
+      "val": "title"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "Nested"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\nDeep content.\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScClose",
+      "val": "/"
+    },
+    {
+      "type": "tScName",
+      "val": "box"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScClose",
+      "val": "/"
+    },
+    {
+      "type": "tScName",
+      "val": "tab"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScClose",
+      "val": "/"
+    },
+    {
+      "type": "tScName",
+      "val": "tabs"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n\nMixed delimiters (percent outer, angle inner):\n\n"
+    },
+    {
+      "type": "tLeftDelimScWithMarkup",
+      "val": "{{%"
+    },
+    {
+      "type": "tScName",
+      "val": "panel"
+    },
+    {
+      "type": "tScParam",
+      "val": "header"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "Mixed"
+    },
+    {
+      "type": "tRightDelimScWithMarkup",
+      "val": "%}}"
+    },
+    {
+      "type": "tText",
+      "val": "\nInside panel with a nested angle shortcode:\n"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "icon"
+    },
+    {
+      "type": "tScParam",
+      "val": "name"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "sparkles"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n"
+    },
+    {
+      "type": "tLeftDelimScWithMarkup",
+      "val": "{{%"
+    },
+    {
+      "type": "tScClose",
+      "val": "/"
+    },
+    {
+      "type": "tScName",
+      "val": "panel"
+    },
+    {
+      "type": "tRightDelimScWithMarkup",
+      "val": "%}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n\n---\n\n## 4. Lists, reference links, images, and tables\n\nA regular list with inline shortcodes:\n\n- Before "
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "badge"
+    },
+    {
+      "type": "tScParam",
+      "val": "text"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "LIST"
+    },
+    {
+      "type": "tScParam",
+      "val": "color"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "orange"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": " after.\n- A second bullet with **bold** and `code`.\n\nA nested list with block content:\n\n- Parent\n  - Child with standalone shortcode:\n"
+    },
+    {
+      "type": "tIndentation",
+      "val": "    "
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "feature"
+    },
+    {
+      "type": "tScParam",
+      "val": "enabled"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "true"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "\n\nReference-style links and images:\n\nHere is a reference link to the [documentation][1], and a reference image:  \n![Scenic Pic][hero-img]\n\nA simple table:\n\n| Feature   | Value                   |\n| --------- | ----------------------- |\n| Bold      | **yes**                 |\n| Shortcode | "
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "badge"
+    },
+    {
+      "type": "tScParam",
+      "val": "text"
+    },
+    {
+      "type": "tScParamVal",
+      "val": "OK"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": " |\n| Link      | [Hugo][1]               |\n\n---\n\n## 5. Code fences \u0026 inline code (should be untouched)\n\nInline code like `"
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "not-a-shortcode"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": "` must **not** be converted.\n\n```go\n// A fenced code block that *looks* like shortcodes but isn't:\nfmt.Println(\""
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c"
+    },
+    {
+      "type": "tScName",
+      "val": "fake"
+    },
+    {
+      "type": "tScParam",
+      "val": "shortcode"
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}"
+    },
+    {
+      "type": "tText",
+      "val": " should remain as-is\")\n```\n\n[1]: https://www.google.com\n"
+    }
+  ],
+  "contentTextSpans": [
+    {
+      "start": 0,
+      "end": 181,
+      "text": "\nThis document stress-tests **shortcodes** and Markdown. See the [reference link][1] and this inline link to [Hugo](https://gohugo.io).\n\n\u003e A blockquote with a shortcode inside:\n\u003e\n\u003e "
+    },
+    {
+      "start": 222,
+      "end": 337,
+      "text": " and some **bold** text.\n\n---\n\n## 1. Standalone / open-only shortcodes (angle \u0026 percent)\n\nPlain paragraph before.\n\n"
+    },
+    {
+      "start": 365,
+      "end": 393,
+      "text": "\n\nInline usage: Text before "
+    },
+    {
+      "start": 433,
+      "end": 476,
+      "text": " and after.\n\nPercent variant standalone:  \n"
+    },
+    {
+      "start": 510,
+      "end": 527,
+      "text": "\n\nOdd spacing:  \n"
+    },
+    {
+      "start": 563,
+      "end": 581,
+      "text": "\n\nBack-to-back:  \n"
+    },
+    {
+      "start": 629,
+      "end": 709,
+      "text": "\n\n---\n\n## 2. Paired shortcodes (angle \u0026 percent) with bodies\n\nAngle with body:\n\n"
+    },
+    {
+      "start": 742,
+      "end": 794,
+      "text": "\nThis **inside** text should be preserved verbatim.\n"
+    },
+    {
+      "start": 806,
+      "end": 847,
+      "text": "\n\nPercent with body (Markdown-enabled):\n\n"
+    },
+    {
+      "start": 876,
+      "end": 949,
+      "text": "\nYou can put **Markdown** here, including a list:\n\n- Item A (with inline "
+    },
+    {
+      "start": 971,
+      "end": 1037,
+      "text": ")\n- Item B\n- Item C\n\nAnd a reference style link to the [Docs][1].\n"
+    },
+    {
+      "start": 1056,
+      "end": 1101,
+      "text": "\n\nOddly spaced closing (should still pair):\n\n"
+    },
+    {
+      "start": 1116,
+      "end": 1172,
+      "text": "\nWrapped body content with _italics_ and `inline code`.\n"
+    },
+    {
+      "start": 1200,
+      "end": 1264,
+      "text": "\n\n---\n\n## 3. Nested shortcodes\n\nTabs with nested tab children:\n\n"
+    },
+    {
+      "start": 1276,
+      "end": 1277,
+      "text": "\n"
+    },
+    {
+      "start": 1301,
+      "end": 1332,
+      "text": "\nFirst tab body with an inline "
+    },
+    {
+      "start": 1358,
+      "end": 1366,
+      "text": " badge.\n"
+    },
+    {
+      "start": 1378,
+      "end": 1380,
+      "text": "\n\n"
+    },
+    {
+      "start": 1405,
+      "end": 1436,
+      "text": "\nSecond tab body.\n\nNested box:\n"
+    },
+    {
+      "start": 1462,
+      "end": 1477,
+      "text": "\nDeep content.\n"
+    },
+    {
+      "start": 1489,
+      "end": 1490,
+      "text": "\n"
+    },
+    {
+      "start": 1502,
+      "end": 1503,
+      "text": "\n"
+    },
+    {
+      "start": 1516,
+      "end": 1566,
+      "text": "\n\nMixed delimiters (percent outer, angle inner):\n\n"
+    },
+    {
+      "start": 1594,
+      "end": 1639,
+      "text": "\nInside panel with a nested angle shortcode:\n"
+    },
+    {
+      "start": 1667,
+      "end": 1668,
+      "text": "\n"
+    },
+    {
+      "start": 1682,
+      "end": 1788,
+      "text": "\n\n---\n\n## 4. Lists, reference links, images, and tables\n\nA regular list with inline shortcodes:\n\n- Before "
+    },
+    {
+      "start": 1828,
+      "end": 1962,
+      "text": " after.\n- A second bullet with **bold** and `code`.\n\nA nested list with block content:\n\n- Parent\n  - Child with standalone shortcode:\n"
+    },
+    {
+      "start": 1996,
+      "end": 2286,
+      "text": "\n\nReference-style links and images:\n\nHere is a reference link to the [documentation][1], and a reference image:  \n![Scenic Pic][hero-img]\n\nA simple table:\n\n| Feature   | Value                   |\n| --------- | ----------------------- |\n| Bold      | **yes**                 |\n| Shortcode | "
+    },
+    {
+      "start": 2309,
+      "end": 2431,
+      "text": " |\n| Link      | [Hugo][1]               |\n\n---\n\n## 5. Code fences \u0026 inline code (should be untouched)\n\nInline code like `"
+    },
+    {
+      "start": 2454,
+      "end": 2566,
+      "text": "` must **not** be converted.\n\n```go\n// A fenced code block that *looks* like shortcodes but isn't:\nfmt.Println(\""
+    },
+    {
+      "start": 2588,
+      "end": 2644,
+      "text": " should remain as-is\")\n```\n\n[1]: https://www.google.com\n"
+    }
+  ]
+}

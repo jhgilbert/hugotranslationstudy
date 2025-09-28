@@ -1,12 +1,12 @@
 {
-  "sourcePath": "content/example.md",
+  "sourcePath": "content/01_simple.md",
   "frontMatter": {
     "draft": false,
     "tags": [
       "demo",
       "parser"
     ],
-    "title": "Sample Post"
+    "title": "Simple File"
   },
   "contentRaw": "\nHello **world**!\n\nHere is a shortcode:\n\n{{\u003c note \"Remember to drink water\" \u003e}}\n\nMore text after the shortcode.\n",
   "contentTokens": [

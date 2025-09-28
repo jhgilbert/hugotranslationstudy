@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
@@ -41,33 +42,83 @@ type Output struct {
 }
 
 func main() {
-	srcPath := "content/example.md"
-	outDir := "out"
+	contentRoot := "content"
+	outRoot := "out"
 
-	if err := os.MkdirAll(outDir, 0o755); err != nil {
-		log.Fatalf("mkdir %s: %v", outDir, err)
+    // Clear the out folder if it exists
+	if _, err := os.Stat(outRoot); err == nil {
+		if err := os.RemoveAll(outRoot); err != nil {
+			log.Fatalf("remove %s: %v", outRoot, err)
+		}
 	}
 
-	// 1–2: parse + write JSON
-	jsonPath, outObj := parseAndWriteJSON(srcPath, outDir)
+	// Recreate a clean out folder
+	if err := os.MkdirAll(outRoot, 0o755); err != nil {
+		log.Fatalf("mkdir %s: %v", outRoot, err)
+	}
 
-	// 3–4: read JSON + translate (Pig Latin or whatever your translateBodyUsingRanges does)
-	translatedBody := translateBodyUsingRanges(jsonPath)
+	var processed int
+	err := filepath.WalkDir(contentRoot, func(path string, d fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if d.IsDir() {
+			return nil
+		}
+		// only .md source files in content/
+		if !strings.HasSuffix(strings.ToLower(path), ".md") ||
+			strings.HasSuffix(strings.ToLower(path), ".translated.md") ||
+			strings.HasSuffix(strings.ToLower(path), ".mdoc") {
+			return nil
+		}
 
-	// 5: write translated Markdown (.md)
-	mdOut := "content/example.translated.md"
-	writeHugoFile(mdOut, outObj.FrontMatter, translatedBody)
+		// Mirror the folder structure from content -> out
+		rel, err := filepath.Rel(contentRoot, path)
+		if err != nil {
+			return fmt.Errorf("rel path: %w", err)
+		}
+		relDir := filepath.Dir(rel)                             // e.g. folderA/folderB
+		base := strings.TrimSuffix(filepath.Base(rel), ".md")   // e.g. file
+		targetDir := filepath.Join(outRoot, relDir)             // out/folderA/folderB
+		if err := os.MkdirAll(targetDir, 0o755); err != nil {
+			return fmt.Errorf("mkdir %s: %w", targetDir, err)
+		}
 
-	// 6: convert the ORIGINAL body to .mdoc (paired vs standalone) and write
-	mdocBody := tomarkdoc.ConvertBodyToMdocTokens(outObj.ContentRaw) // <-- original, not translated
-	mdocOut := "content/example.mdoc"
-	tomarkdoc.WriteMdocFile(mdocOut, outObj.FrontMatter, mdocBody)
+		fmt.Printf("Processing %s -> %s\n", filepath.ToSlash(path), filepath.ToSlash(targetDir))
 
-	fmt.Println("Round trip complete.")
-	fmt.Println(" JSON written to:        ", filepath.ToSlash(jsonPath))
-	fmt.Println(" Translated .md at:      ", filepath.ToSlash(mdOut))
-	fmt.Println(" Original .mdoc at:      ", filepath.ToSlash(mdocOut))
+		// 1–2: parse + write JSON into out/.../file.json
+		jsonOut := filepath.Join(targetDir, base+".json")
+		jsonPath, outObj := parseAndWriteJSON(path, targetDir) // writes targetDir/base.json
+		// ensure jsonPath matches our expected location (jsonOut)
+		_ = jsonOut
+		_ = jsonPath
+
+		// 3–4: read JSON + translate (Pig Latin or your translator)
+		translatedBody := translateBodyUsingRanges(filepath.Join(targetDir, base+".json"))
+
+		// 5: write translated Markdown -> out/.../file.translated.md
+		mdOut := filepath.Join(targetDir, base+".translated.md")
+		writeHugoFile(mdOut, outObj.FrontMatter, translatedBody)
+
+		// 6: convert ORIGINAL body to .mdoc -> out/.../file.mdoc
+		mdocBody := tomarkdoc.ConvertBodyToMdocTokens(outObj.ContentRaw)
+		mdocOut := filepath.Join(targetDir, base+".mdoc")
+		tomarkdoc.WriteMdocFile(mdocOut, outObj.FrontMatter, mdocBody)
+
+		fmt.Println("  JSON:       ", filepath.ToSlash(filepath.Join(targetDir, base+".json")))
+		fmt.Println("  Translated: ", filepath.ToSlash(mdOut))
+		fmt.Println("  MDOC:       ", filepath.ToSlash(mdocOut))
+
+		processed++
+		return nil
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Done. Processed %d Markdown file(s).\n", processed)
 }
+
 
 
 // --- Step 1–2: Parse and JSON ---

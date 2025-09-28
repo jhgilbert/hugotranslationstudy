@@ -1,0 +1,130 @@
+---
+draft: false
+tags:
+    - demo
+    - shortcodes
+    - edge-cases
+title: 'Everything Bagel: Complex Conversion Test'
+---
+
+This document stress-tests **shortcodes** and Markdown. See the [reference link][1] and this inline link to [Hugo](https://gohugo.io).
+
+> A blockquote with a shortcode inside:
+>
+> {% badge text="QUOTE" color="purple" /%} and some **bold** text.
+
+---
+
+## 1. Standalone / open-only shortcodes (angle & percent)
+
+Plain paragraph before.
+
+{% note "Stay hydrated" /%}
+
+Inline usage: Text before {% badge text="INLINE" color="blue" /%} and after.
+
+Percent variant standalone:  
+{% tag name="alone" foo="bar" /%}
+
+Odd spacing:  
+{% spacer /%}
+
+Back-to-back:  
+{% badge text="ONE" /%}{% badge text="TWO" /%}
+
+---
+
+## 2. Paired shortcodes (angle & percent) with bodies
+
+Angle with body:
+
+{% box title="Important Box" %}
+This **inside** text should be preserved verbatim.
+{% /box %}
+
+Percent with body (Markdown-enabled):
+
+{% admonition type="tip" %}
+You can put **Markdown** here, including a list:
+
+- Item A (with inline {% badge text="A" /%})
+- Item B
+- Item C
+
+And a reference style link to the [Docs][1].
+{% /admonition %}
+
+Oddly spaced closing (should still pair):
+
+{% wrapper %}
+Wrapped body content with _italics_ and `inline code`.
+{% /wrapper %}
+
+---
+
+## 3. Nested shortcodes
+
+Tabs with nested tab children:
+
+{% tabs %}
+{% tab name="First" %}
+First tab body with an inline {% badge text="FIRST" /%} badge.
+{% /tab %}
+
+{% tab name="Second" %}
+Second tab body.
+
+Nested box:
+{% box title="Nested" %}
+Deep content.
+{% /box %}
+{% /tab %}
+{% /tabs %}
+
+Mixed delimiters (percent outer, angle inner):
+
+{% panel header="Mixed" %}
+Inside panel with a nested angle shortcode:
+{% icon name="sparkles" /%}
+{% /panel %}
+
+---
+
+## 4. Lists, reference links, images, and tables
+
+A regular list with inline shortcodes:
+
+- Before {% badge text="LIST" color="orange" /%} after.
+- A second bullet with **bold** and `code`.
+
+A nested list with block content:
+
+- Parent
+  - Child with standalone shortcode:
+    {% feature enabled="true" /%}
+
+Reference-style links and images:
+
+Here is a reference link to the [documentation][1], and a reference image:  
+![Scenic Pic][hero-img]
+
+A simple table:
+
+| Feature   | Value                   |
+| --------- | ----------------------- |
+| Bold      | **yes**                 |
+| Shortcode | {% badge text="OK" /%} |
+| Link      | [Hugo][1]               |
+
+---
+
+## 5. Code fences & inline code (should be untouched)
+
+Inline code like `{% not-a-shortcode /%}` must **not** be converted.
+
+```go
+// A fenced code block that *looks* like shortcodes but isn't:
+fmt.Println("{% fake shortcode /%} should remain as-is")
+```
+
+[1]: https://www.google.com

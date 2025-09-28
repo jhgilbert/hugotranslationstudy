@@ -1,5 +1,5 @@
 ---
-title: "Sample Post"
+title: "Simple File"
 tags: ["demo", "parser"]
 draft: false
 ---
