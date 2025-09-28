@@ -1,0 +1,15 @@
+---
+draft: false
+tags:
+    - demo
+    - parser
+title: Sample Post
+---
+
+HELLO **WORLD**!
+
+HERE IS A SHORTCODE:
+
+{{< note "Remember to drink water" >}}
+
+MORE TEXT AFTER THE SHORTCODE.
