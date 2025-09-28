@@ -10,14 +10,23 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type tItem struct {
-	typ   string
-	val   []byte
-	start int
-	end   int
+// Tok is a tiny wrapper around pageparser items that we care about.
+type Tok struct {
+	Typ   string
+	Val   []byte
+	Start int
+	End   int
 }
 
+// Public entry point: convert a Hugo body to .mdoc shortcode punctuation.
 func ConvertBodyToMdocTokens(body string) string {
+	toks := tokenizeShortcodes(body)
+	return renderToMdoc(toks, body)
+}
+
+/* ------------------------------- Tokenizing ------------------------------- */
+
+func tokenizeShortcodes(body string) []Tok {
 	res, err := pageparser.ParseMain(strings.NewReader(body), pageparser.Config{})
 	if err != nil {
 		log.Fatalf("ParseMain(original): %v", err)
@@ -25,13 +34,7 @@ func ConvertBodyToMdocTokens(body string) string {
 	it := res.Iterator()
 	src := res.Input()
 
-	type tItem struct {
-		typ   string
-		val   []byte
-		start int
-		end   int
-	}
-	var toks []tItem
+	var toks []Tok
 	for {
 		item := it.Next()
 		if item.IsEOF() || item.IsDone() {
@@ -39,132 +42,152 @@ func ConvertBodyToMdocTokens(body string) string {
 		}
 		start := item.Pos()
 		val := item.Val(src)
-		toks = append(toks, tItem{
-			typ:   item.Type.String(),
-			val:   val,
-			start: start,
-			end:   start + len(val),
+		toks = append(toks, Tok{
+			Typ:   item.Type.String(),
+			Val:   val,
+			Start: start,
+			End:   start + len(val),
 		})
 	}
+	return toks
+}
 
-	isLeft := func(typ string) bool {
-		return typ == "tLeftDelimScNoMarkup" || typ == "tLeftDelimScWithMarkup"
+func isLeftDelim(typ string) bool {
+	return typ == "tLeftDelimScNoMarkup" || typ == "tLeftDelimScWithMarkup"
+}
+func isRightDelim(typ string) bool {
+	return typ == "tRightDelimScNoMarkup" || typ == "tRightDelimScWithMarkup"
+}
+
+/* -------------------------------- Parsing -------------------------------- */
+
+// getInterior returns the raw string between a left delimiter at leftIdx and
+// its immediate right delimiter, plus the parsed shortcode name and the index
+// of that right delimiter in toks.
+func getInterior(toks []Tok, body string, leftIdx int) (interior, name string, rightIdx int) {
+	j := leftIdx + 1
+	for j < len(toks) && !isRightDelim(toks[j].Typ) {
+		j++
 	}
-	isRight := func(typ string) bool {
-		return typ == "tRightDelimScNoMarkup" || typ == "tRightDelimScWithMarkup"
+	if j >= len(toks) {
+		return "", "", leftIdx // no closing; treat as text
 	}
+	left := toks[leftIdx]
+	right := toks[j]
+	inner := body[left.End:right.Start]
+	trimmed := strings.TrimSpace(inner)
 
-	// Capture the substring between a left-delim at i and its next right-delim.
-	getInterior := func(leftIdx int) (interior string, name string, rightIdx int) {
-		j := leftIdx + 1
-		for j < len(toks) && !isRight(toks[j].typ) {
-			j++
-		}
-		if j >= len(toks) {
-			return "", "", leftIdx
-		}
-		left := toks[leftIdx]
-		right := toks[j]
-		inner := body[left.end:right.start]
-		trimmed := strings.TrimSpace(inner)
-
-		// name is the first token after trimming optional '/'
-		n := trimmed
-		if strings.HasPrefix(n, "/") {
-			n = strings.TrimSpace(n[1:])
-		}
-		if sp := strings.Fields(n); len(sp) > 0 {
-			name = sp[0]
-		}
-		return trimmed, name, j
+	// The shortcode name is the first field after trimming optional leading "/".
+	n := trimmed
+	if strings.HasPrefix(n, "/") {
+		n = strings.TrimSpace(n[1:])
 	}
+	if sp := strings.Fields(n); len(sp) > 0 {
+		name = sp[0]
+	}
+	return trimmed, name, j
+}
 
-	// Look ahead after the current shortcode to see if a matching close exists (nesting-aware).
-	hasMatchingClose := func(fromRightIdx int, name string) bool {
-		depth := 0
-		for i := fromRightIdx + 1; i < len(toks); i++ {
-			if isLeft(toks[i].typ) {
-				// closing?
-				if i+1 < len(toks) && toks[i+1].typ == "tScClose" {
-					_, closeName, rIdx := getInterior(i)
-					if closeName == name {
-						if depth == 0 {
-							return true
-						}
-						depth--
+// hasMatchingClose checks if, after the right delimiter of an opening tag,
+// a matching closing tag for the given name occurs (nesting-aware).
+func hasMatchingClose(toks []Tok, body string, fromRightIdx int, name string) bool {
+	depth := 0
+	for i := fromRightIdx + 1; i < len(toks); i++ {
+		if isLeftDelim(toks[i].Typ) {
+			// Closing tag?
+			if i+1 < len(toks) && toks[i+1].Typ == "tScClose" {
+				_, closeName, rIdx := getInterior(toks, body, i)
+				if closeName == name {
+					if depth == 0 {
+						return true
 					}
-					i = rIdx
-					continue
-				}
-				// opening of same name?
-				_, openName, rIdx := getInterior(i)
-				if openName == name {
-					depth++
+					depth--
 				}
 				i = rIdx
+				continue
 			}
+			// Opening of the same name (nested)
+			_, openName, rIdx := getInterior(toks, body, i)
+			if openName == name {
+				depth++
+			}
+			i = rIdx
 		}
-		return false
 	}
+	return false
+}
 
+/* -------------------------------- Rendering ------------------------------- */
+
+func renderToMdoc(toks []Tok, body string) string {
 	var out strings.Builder
 
 	for i := 0; i < len(toks); i++ {
 		t := toks[i]
 
 		switch {
-		case t.typ == "tText":
-			out.Write(t.val)
+		case t.Typ == "tText":
+			out.Write(t.Val)
 
-		case isLeft(t.typ):
+		case isLeftDelim(t.Typ):
 			// Closing shortcode?
-			if i+1 < len(toks) && toks[i+1].typ == "tScClose" {
-				_, name, rIdx := getInterior(i)
-				if name == "" {
-					out.WriteString("{% / %}")
-				} else {
-					out.WriteString("{% /")
-					out.WriteString(name)
-					out.WriteString(" %}")
-				}
-				i = rIdx
+			if i+1 < len(toks) && toks[i+1].Typ == "tScClose" {
+				writeClosingShortcode(&out, toks, body, &i)
 				continue
 			}
+			// Opening shortcode (paired vs standalone)
+			writeOpeningShortcode(&out, toks, body, &i)
 
-			// Opening shortcode
-			interior, name, rIdx := getInterior(i)
-			if name == "" {
-				out.WriteString("{% ")
-				out.WriteString(strings.TrimSpace(interior))
-				out.WriteString(" %}")
-				i = rIdx
-				continue
-			}
-
-			// Paired vs standalone?
-			if hasMatchingClose(rIdx, name) {
-				out.WriteString("{% ")
-				out.WriteString(strings.TrimSpace(interior))
-				out.WriteString(" %}")
-			} else {
-				out.WriteString("{% ")
-				out.WriteString(strings.TrimSpace(interior))
-				out.WriteString(" /%}")
-			}
-			i = rIdx
-
-		case isRight(t.typ):
-			// handled by left-delim branch; ignore stray
+		case isRightDelim(t.Typ):
+			// Right delimiters are consumed by left handlers; ignore stray.
 
 		default:
-			// Fallback: pass raw bytes (covers names/params we didn't explicitly rebuild)
-			out.Write(t.val)
+			// Fallback: pass raw bytes (covers any token we didn't model).
+			out.Write(t.Val)
 		}
 	}
 
 	return out.String()
 }
 
+func writeClosingShortcode(out *strings.Builder, toks []Tok, body string, i *int) {
+	_, name, rIdx := getInterior(toks, body, *i)
+	if name == "" {
+		out.WriteString("{% / %}")
+	} else {
+		out.WriteString("{% /")
+		out.WriteString(name)
+		out.WriteString(" %}")
+	}
+	*i = rIdx // advance past the right delimiter we consumed
+}
+
+func writeOpeningShortcode(out *strings.Builder, toks []Tok, body string, i *int) {
+	interior, name, rIdx := getInterior(toks, body, *i)
+	trimmed := strings.TrimSpace(interior)
+
+	if name == "" {
+		// Could not parse a name; pass interior through with normalized spacing.
+		out.WriteString("{% ")
+		out.WriteString(trimmed)
+		out.WriteString(" %}")
+		*i = rIdx
+		return
+	}
+
+	if hasMatchingClose(toks, body, rIdx, name) {
+		// Paired shortcode
+		out.WriteString("{% ")
+		out.WriteString(trimmed)
+		out.WriteString(" %}")
+	} else {
+		// Standalone (self-closing in .mdoc)
+		out.WriteString("{% ")
+		out.WriteString(trimmed)
+		out.WriteString(" /%}")
+	}
+	*i = rIdx
+}
 
 func WriteMdocFile(outPath string, frontMatter map[string]any, body string) {
 	// Front matter identical (YAML fences)
