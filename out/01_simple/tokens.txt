@@ -1,0 +1,6 @@
+Type=tText                     Start=0     End=108   Val="---\ntitle: \"Simple File\"\ntags: [\"demo\", \"parser\"]\ndraft: false\n---\n\nHello **world**!\n\nHere is a shortcode:\n\n"
+Type=tLeftDelimScNoMarkup      Start=108   End=111   Val="{{<"
+Type=tScName                   Start=112   End=116   Val="note"
+Type=tScParam                  Start=118   End=141   Val="Remember to drink water"
+Type=tRightDelimScNoMarkup     Start=143   End=146   Val=">}}"
+Type=tText                     Start=146   End=179   Val="\n\nMore text after the shortcode.\n"

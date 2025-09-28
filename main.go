@@ -45,7 +45,7 @@ func main() {
 	contentRoot := "content"
 	outRoot := "out"
 
-    // Clear the out folder if it exists
+	// Clear the out folder if it exists
 	if _, err := os.Stat(outRoot); err == nil {
 		if err := os.RemoveAll(outRoot); err != nil {
 			log.Fatalf("remove %s: %v", outRoot, err)
@@ -77,30 +77,38 @@ func main() {
 		if err != nil {
 			return fmt.Errorf("rel path: %w", err)
 		}
-		relDir := filepath.Dir(rel)                             // e.g. folderA/folderB
-		base := strings.TrimSuffix(filepath.Base(rel), ".md")   // e.g. file
-		targetDir := filepath.Join(outRoot, relDir)             // out/folderA/folderB
+		relDir := filepath.Dir(rel)                           // e.g. folderA/folderB
+		base := strings.TrimSuffix(filepath.Base(rel), ".md") // e.g. file
+
+		// Target folder: out/folderA/folderB/file
+		targetDir := filepath.Join(outRoot, relDir, base)
 		if err := os.MkdirAll(targetDir, 0o755); err != nil {
 			return fmt.Errorf("mkdir %s: %w", targetDir, err)
 		}
 
 		fmt.Printf("Processing %s -> %s\n", filepath.ToSlash(path), filepath.ToSlash(targetDir))
 
-		// 1–2: parse + write JSON into out/.../file.json
-		jsonOut := filepath.Join(targetDir, base+".json")
-		jsonPath, outObj := parseAndWriteJSON(path, targetDir) // writes targetDir/base.json
-		// ensure jsonPath matches our expected location (jsonOut)
+		// Debug: write a token dump
+		dumpOut := filepath.Join(targetDir, "tokens.txt")
+		if err := writeTokenDump(path, dumpOut); err != nil {
+			return fmt.Errorf("writeTokenDump: %w", err)
+		}
+		fmt.Println("  Tokens:     ", filepath.ToSlash(dumpOut))
+
+		// 1–2: parse + write JSON into out/.../file/file.json
+		jsonOut := filepath.Join(targetDir, "file.json")
+		jsonPath, outObj := parseAndWriteJSON(path, targetDir)
 		_ = jsonOut
 		_ = jsonPath
 
-		// 3–4: read JSON + translate (Pig Latin or your translator)
+		// 3–4: read JSON + translate
 		translatedBody := translateBodyUsingRanges(filepath.Join(targetDir, base+".json"))
 
-		// 5: write translated Markdown -> out/.../file.translated.md
+		// 5: write translated Markdown
 		mdOut := filepath.Join(targetDir, base+".translated.md")
 		writeHugoFile(mdOut, outObj.FrontMatter, translatedBody)
 
-		// 6: convert ORIGINAL body to .mdoc -> out/.../file.mdoc
+		// 6: convert ORIGINAL body to .mdoc
 		mdocBody := tomarkdoc.ConvertBodyToMdocTokens(outObj.ContentRaw)
 		mdocOut := filepath.Join(targetDir, base+".mdoc")
 		tomarkdoc.WriteMdocFile(mdocOut, outObj.FrontMatter, mdocBody)
@@ -118,8 +126,6 @@ func main() {
 
 	fmt.Printf("Done. Processed %d Markdown file(s).\n", processed)
 }
-
-
 
 // --- Step 1–2: Parse and JSON ---
 
@@ -244,4 +250,38 @@ func writeHugoFile(outPath string, frontMatter map[string]any, body string) {
 	if err := os.WriteFile(outPath, buf.Bytes(), 0o644); err != nil {
 		log.Fatalf("write %s: %v", outPath, err)
 	}
+}
+
+// writeTokenDump writes a plain-text file listing all tokens for debugging.
+func writeTokenDump(srcPath, outPath string) error {
+	raw, err := os.ReadFile(srcPath)
+	if err != nil {
+		return fmt.Errorf("read %s: %w", srcPath, err)
+	}
+
+	// Parse the entire file (front matter + content) so we see everything
+	res, err := pageparser.ParseMain(bytes.NewReader(raw), pageparser.Config{})
+	if err != nil {
+		return fmt.Errorf("ParseMain(%s): %w", srcPath, err)
+	}
+	it := res.Iterator()
+	src := res.Input()
+
+	var buf strings.Builder
+	for {
+		item := it.Next()
+		if item.IsEOF() || item.IsDone() {
+			break
+		}
+		start := item.Pos()
+		val := item.Val(src)
+		end := start + len(val)
+		fmt.Fprintf(&buf, "Type=%-25s Start=%-5d End=%-5d Val=%q\n",
+			item.Type.String(), start, end, string(val))
+	}
+
+	if err := os.WriteFile(outPath, []byte(buf.String()), 0o644); err != nil {
+		return fmt.Errorf("write %s: %w", outPath, err)
+	}
+	return nil
 }
