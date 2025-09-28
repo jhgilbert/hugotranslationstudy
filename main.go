@@ -77,10 +77,10 @@ func main() {
 		if err != nil {
 			return fmt.Errorf("rel path: %w", err)
 		}
-		relDir := filepath.Dir(rel)                           // e.g. folderA/folderB
-		base := strings.TrimSuffix(filepath.Base(rel), ".md") // e.g. file
+		relDir := filepath.Dir(rel)                           // e.g. blog/
+		base := strings.TrimSuffix(filepath.Base(rel), ".md") // e.g. post
 
-		// Target folder: out/folderA/folderB/file
+		// Target folder: out/blog/post/
 		targetDir := filepath.Join(outRoot, relDir, base)
 		if err := os.MkdirAll(targetDir, 0o755); err != nil {
 			return fmt.Errorf("mkdir %s: %w", targetDir, err)
@@ -95,25 +95,27 @@ func main() {
 		}
 		fmt.Println("  Tokens:     ", filepath.ToSlash(dumpOut))
 
-		// 1–2: parse + write JSON into out/.../file/file.json
-		jsonOut := filepath.Join(targetDir, "file.json")
-		jsonPath, outObj := parseAndWriteJSON(path, targetDir)
-		_ = jsonOut
-		_ = jsonPath
+		// 1–2: parse + write JSON -> data.json
+		jsonOut := filepath.Join(targetDir, "data.json")
+		_, outObj := parseAndWriteJSON(path, targetDir)
+		// parseAndWriteJSON currently writes <base>.json — rename/move if needed
+		if err := os.Rename(filepath.Join(targetDir, base+".json"), jsonOut); err != nil {
+			return fmt.Errorf("rename json: %w", err)
+		}
 
 		// 3–4: read JSON + translate
-		translatedBody := translateBodyUsingRanges(filepath.Join(targetDir, base+".json"))
+		translatedBody := translateBodyUsingRanges(jsonOut)
 
-		// 5: write translated Markdown
-		mdOut := filepath.Join(targetDir, base+".translated.md")
+		// 5: write translated Markdown -> translated.md
+		mdOut := filepath.Join(targetDir, "translated.md")
 		writeHugoFile(mdOut, outObj.FrontMatter, translatedBody)
 
-		// 6: convert ORIGINAL body to .mdoc
+		// 6: convert ORIGINAL body to migrated.mdoc
 		mdocBody := tomarkdoc.ConvertBodyToMdocTokens(outObj.ContentRaw)
-		mdocOut := filepath.Join(targetDir, base+".mdoc")
+		mdocOut := filepath.Join(targetDir, "migrated.mdoc")
 		tomarkdoc.WriteMdocFile(mdocOut, outObj.FrontMatter, mdocBody)
 
-		fmt.Println("  JSON:       ", filepath.ToSlash(filepath.Join(targetDir, base+".json")))
+		fmt.Println("  JSON:       ", filepath.ToSlash(jsonOut))
 		fmt.Println("  Translated: ", filepath.ToSlash(mdOut))
 		fmt.Println("  MDOC:       ", filepath.ToSlash(mdocOut))
 
@@ -126,6 +128,7 @@ func main() {
 
 	fmt.Printf("Done. Processed %d Markdown file(s).\n", processed)
 }
+
 
 // --- Step 1–2: Parse and JSON ---
 
