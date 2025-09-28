@@ -6,10 +6,10 @@ tags:
 title: Sample Post
 ---
 
-HELLO **WORLD**!
+Ellohay **orldway**!
 
-HERE IS A SHORTCODE:
+Erehay isway away ortcodeshay:
 
 {{< note "Remember to drink water" >}}
 
-MORE TEXT AFTER THE SHORTCODE.
+Oremay exttay afterway ethay ortcodeshay.

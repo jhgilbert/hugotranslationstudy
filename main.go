@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 	"unicode/utf8"
+    "unicode" 
 
 	"github.com/gohugoio/hugo/parser/pageparser"
 	"gopkg.in/yaml.v3"
@@ -149,6 +150,8 @@ func parseAndWriteJSON(srcPath, outDir string) (string, Output) {
 
 // --- Step 3–4: Translate using ranges ---
 
+// translateBodyUsingRanges reads the JSON, converts all text spans to Pig Latin,
+// and splices them back into the body using byte ranges.
 func translateBodyUsingRanges(jsonPath string) string {
 	b, err := os.ReadFile(jsonPath)
 	if err != nil {
@@ -160,6 +163,7 @@ func translateBodyUsingRanges(jsonPath string) string {
 	}
 
 	body := []byte(in.ContentRaw)
+
 	for i := len(in.ContentTextSpans) - 1; i >= 0; i-- {
 		span := in.ContentTextSpans[i]
 		if span.Start < 0 || span.End < 0 || span.Start > span.End || span.End > len(body) {
@@ -168,14 +172,79 @@ func translateBodyUsingRanges(jsonPath string) string {
 		if !utf8.Valid(body[span.Start:span.End]) {
 			log.Fatalf("span not valid utf8 at %d..%d", span.Start, span.End)
 		}
-		upper := strings.ToUpper(string(body[span.Start:span.End]))
+
+		original := string(body[span.Start:span.End])
+		translated := toPigLatin(original)
+
 		before := append([]byte(nil), body[:span.Start]...)
 		after := append([]byte(nil), body[span.End:]...)
-		body = append(before, []byte(upper)...)
+		body = append(before, []byte(translated)...)
 		body = append(body, after...)
 	}
 	return string(body)
 }
+
+// toPigLatin converts an entire string, word by word, to Pig Latin.
+func toPigLatin(s string) string {
+	words := strings.FieldsFunc(s, func(r rune) bool {
+		return !unicode.IsLetter(r)
+	})
+
+	// Split with delimiters preserved
+	var result strings.Builder
+	start := 0
+	for _, w := range words {
+		idx := strings.Index(s[start:], w)
+		if idx >= 0 {
+			// write any punctuation before this word
+			result.WriteString(s[start : start+idx])
+			result.WriteString(pigWord(w))
+			start += idx + len(w)
+		}
+	}
+	// trailing punctuation
+	if start < len(s) {
+		result.WriteString(s[start:])
+	}
+	return result.String()
+}
+
+// pigWord converts a single word to Pig Latin.
+func pigWord(word string) string {
+	if word == "" {
+		return ""
+	}
+	runes := []rune(word)
+	isUpper := unicode.IsUpper(runes[0])
+	lowerWord := strings.ToLower(word)
+
+	vowels := "aeiou"
+	if strings.ContainsRune(vowels, rune(lowerWord[0])) {
+		res := lowerWord + "way"
+		if isUpper {
+			return strings.Title(res)
+		}
+		return res
+	}
+
+	// find first vowel
+	i := 0
+	for ; i < len(lowerWord); i++ {
+		if strings.ContainsRune(vowels, rune(lowerWord[i])) {
+			break
+		}
+	}
+	if i == len(lowerWord) {
+		// no vowel found
+		return lowerWord + "ay"
+	}
+	res := lowerWord[i:] + lowerWord[:i] + "ay"
+	if isUpper {
+		return strings.Title(res)
+	}
+	return res
+}
+
 
 // --- Step 5: Write Markdown (.md) ---
 
