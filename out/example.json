@@ -1,0 +1,62 @@
+{
+  "sourcePath": "content/example.md",
+  "frontMatter": {
+    "draft": false,
+    "tags": [
+      "demo",
+      "parser"
+    ],
+    "title": "Sample Post"
+  },
+  "contentRaw": "\nHello **world**!\n\nHere is a shortcode:\n\n{{\u003c note \"Remember to drink water\" \u003e}}\n\nMore text after the shortcode.\n",
+  "contentTokens": [
+    {
+      "type": "tText",
+      "val": "\nHello **world**!\n\nHere is a shortcode:\n\n",
+      "start": 0,
+      "end": 41
+    },
+    {
+      "type": "tLeftDelimScNoMarkup",
+      "val": "{{\u003c",
+      "start": 41,
+      "end": 44
+    },
+    {
+      "type": "tScName",
+      "val": "note",
+      "start": 45,
+      "end": 49
+    },
+    {
+      "type": "tScParam",
+      "val": "Remember to drink water",
+      "start": 51,
+      "end": 74
+    },
+    {
+      "type": "tRightDelimScNoMarkup",
+      "val": "\u003e}}",
+      "start": 76,
+      "end": 79
+    },
+    {
+      "type": "tText",
+      "val": "\n\nMore text after the shortcode.\n",
+      "start": 79,
+      "end": 112
+    }
+  ],
+  "contentTextSpans": [
+    {
+      "start": 0,
+      "end": 41,
+      "text": "\nHello **world**!\n\nHere is a shortcode:\n\n"
+    },
+    {
+      "start": 79,
+      "end": 112,
+      "text": "\n\nMore text after the shortcode.\n"
+    }
+  ]
+}

@@ -6,52 +6,114 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/gohugoio/hugo/parser/pageparser"
 )
 
+type Token struct {
+	Type  string `json:"type"`
+	Val   string `json:"val"`
+	Start int    `json:"start"` // byte offset into contentRaw
+	End   int    `json:"end"`   // byte offset into contentRaw (exclusive)
+}
+
+type TextSpan struct {
+	Start int    `json:"start"` // byte offset into contentRaw
+	End   int    `json:"end"`   // byte offset into contentRaw (exclusive)
+	Text  string `json:"text"`
+}
+
+type Output struct {
+	SourcePath        string                 `json:"sourcePath"`
+	FrontMatter       map[string]any         `json:"frontMatter"` // decoded FM only
+	ContentRaw        string                 `json:"contentRaw"`  // raw Markdown body only (no FM)
+	ContentTok        []Token                `json:"contentTokens"`
+	ContentTextSpans  []TextSpan             `json:"contentTextSpans"` // only text tokens (easy to translate)
+}
+
 func main() {
-	// 1) Read a Hugo content file (Markdown)
-	b, err := os.ReadFile("content/example.md")
+	srcPath := "content/example.md"
+	outDir := "out"
+
+	// Read the whole file
+	raw, err := os.ReadFile(srcPath)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("read %s: %v", srcPath, err)
 	}
 
-	// 2) Quickly split front matter vs. content
-	cf, err := pageparser.ParseFrontMatterAndContent(bytes.NewReader(b))
+	// 1) Split into Front Matter (decoded) and Content (raw body)
+	cf, err := pageparser.ParseFrontMatterAndContent(bytes.NewReader(raw))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("ParseFrontMatterAndContent: %v", err)
 	}
 
-	fmt.Println("=== FRONT MATTER (decoded) ===")
-	fmJSON, _ := json.MarshalIndent(cf.FrontMatter, "", "  ")
-	fmt.Println(string(fmJSON))
-
-	fmt.Println("\n=== CONTENT (raw Markdown body) ===")
-	fmt.Println(string(cf.Content))
-
-	// 3) Tokenize the whole file (front matter + body) to see what pageparser recognizes
-	fmt.Println("\n=== TOKENS (type, value) ===")
-	res, err := pageparser.ParseMain(bytes.NewReader(b), pageparser.Config{})
+	// 2) Tokenize ONLY the content body (so FM never appears here)
+	contentRes, err := pageparser.ParseMain(bytes.NewReader(cf.Content), pageparser.Config{})
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("ParseMain(content): %v", err)
 	}
-	it := res.Iterator()
-	src := res.Input()
+	it := contentRes.Iterator()
+	src := contentRes.Input()
+
+	var (
+		bodyTokens []Token
+		textSpans  []TextSpan
+	)
 
 	for {
 		item := it.Next()
-		// End-of-input or error
 		if item.IsEOF() || item.IsDone() {
 			break
 		}
-		// Show a compact description of each item.
-		typ := item.Type.String()
-		val := item.ValStr(src)
-		// Keep lines short: trim newlines and long text
-		if len(val) > 80 {
-			val = val[:77] + "..."
+
+		start := item.Pos()                 // byte offset into cf.Content
+		valB := item.Val(src)               // []byte slice for this token
+		end := start + len(valB)            // exclusive
+		val := string(valB)                 // keep exact text; do not truncate
+
+		tok := Token{
+			Type:  item.Type.String(),
+			Val:   val,
+			Start: start,
+			End:   end,
 		}
-		fmt.Printf("%-28s | %q\n", typ, val)
+		bodyTokens = append(bodyTokens, tok)
+
+		// Collect only text tokens as spans for translation workflows
+		if item.IsText() && len(val) > 0 {
+			textSpans = append(textSpans, TextSpan{
+				Start: start,
+				End:   end,
+				Text:  val,
+			})
+		}
 	}
+
+	// 3) Build output with clean separation
+	out := Output{
+		SourcePath:       srcPath,
+		FrontMatter:      cf.FrontMatter,     // FM only
+		ContentRaw:       string(cf.Content), // body only
+		ContentTok:       bodyTokens,         // tokens from body only
+		ContentTextSpans: textSpans,          // only text tokens
+	}
+
+	// 4) Write JSON
+	if err := os.MkdirAll(outDir, 0o755); err != nil {
+		log.Fatalf("mkdir %s: %v", outDir, err)
+	}
+	base := strings.TrimSuffix(filepath.Base(srcPath), filepath.Ext(srcPath))
+	outPath := filepath.Join(outDir, base+".json")
+
+	data, err := json.MarshalIndent(out, "", "  ")
+	if err != nil {
+		log.Fatalf("marshal: %v", err)
+	}
+	if err := os.WriteFile(outPath, data, 0o644); err != nil {
+		log.Fatalf("write %s: %v", outPath, err)
+	}
+
+	fmt.Printf("Wrote %s (%d bytes)\n", outPath, len(data))
 }
