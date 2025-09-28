@@ -8,8 +8,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"unicode"
 	"unicode/utf8"
-    "unicode" 
 
 	"github.com/gohugoio/hugo/parser/pageparser"
 	"gopkg.in/yaml.v3"
@@ -49,23 +49,24 @@ func main() {
 	// 1–2: parse + write JSON
 	jsonPath, outObj := parseAndWriteJSON(srcPath, outDir)
 
-	// 3–4: read JSON + translate (uppercase)
+	// 3–4: read JSON + translate (Pig Latin or whatever your translateBodyUsingRanges does)
 	translatedBody := translateBodyUsingRanges(jsonPath)
 
 	// 5: write translated Markdown (.md)
 	mdOut := "content/example.translated.md"
 	writeHugoFile(mdOut, outObj.FrontMatter, translatedBody)
 
-	// 6: convert to .mdoc using tokens (paired vs standalone) and write
-	mdocBody := convertBodyToMdocTokens(translatedBody)
-	mdocOut := "content/example.translated.mdoc"
+	// 6: convert the ORIGINAL body to .mdoc (paired vs standalone) and write
+	mdocBody := convertBodyToMdocTokens(outObj.ContentRaw) // <-- original, not translated
+	mdocOut := "content/example.mdoc"
 	writeMdocFile(mdocOut, outObj.FrontMatter, mdocBody)
 
 	fmt.Println("Round trip complete.")
 	fmt.Println(" JSON written to:        ", filepath.ToSlash(jsonPath))
 	fmt.Println(" Translated .md at:      ", filepath.ToSlash(mdOut))
-	fmt.Println(" Translated .mdoc at:    ", filepath.ToSlash(mdocOut))
+	fmt.Println(" Original .mdoc at:      ", filepath.ToSlash(mdocOut))
 }
+
 
 // --- Step 1–2: Parse and JSON ---
 
@@ -263,10 +264,10 @@ type tItem struct {
 }
 
 func convertBodyToMdocTokens(body string) string {
-	// Tokenize the *translated* body
+	// Tokenize the *original* (untranslated) body
 	res, err := pageparser.ParseMain(strings.NewReader(body), pageparser.Config{})
 	if err != nil {
-		log.Fatalf("ParseMain(translated): %v", err)
+		log.Fatalf("ParseMain(original): %v", err)
 	}
 	it := res.Iterator()
 	src := res.Input()
@@ -353,10 +354,8 @@ func convertBodyToMdocTokens(body string) string {
 		case "tLeftDelimScNoMarkup":
 			// Closing shortcode?
 			if i+1 < len(toks) && toks[i+1].typ == "tScClose" {
-				interior, name, rIdx := getInterior(i)
-				_ = interior // not needed; we normalize closing spacing
+				_, name, rIdx := getInterior(i)
 				if name == "" {
-					// Fallback: write original slice if we somehow failed to parse
 					out.WriteString("{% / %}")
 				} else {
 					out.WriteString("{% /")
@@ -370,7 +369,6 @@ func convertBodyToMdocTokens(body string) string {
 			// Opening shortcode
 			interior, name, rIdx := getInterior(i)
 			if name == "" {
-				// Could not parse; conservatively pass through as text-ish
 				out.WriteString("{% ")
 				out.WriteString(strings.TrimSpace(interior))
 				out.WriteString(" %}")
@@ -391,10 +389,9 @@ func convertBodyToMdocTokens(body string) string {
 			i = rIdx
 
 		case "tRightDelimScNoMarkup":
-			// Normally consumed by the LeftDelim handler; ignore if encountered directly.
+			// Normally consumed by the LeftDelim handler; ignore.
 
 		default:
-			// Any other token types we didn't explicitly branch on:
 			out.Write(t.val)
 		}
 	}
