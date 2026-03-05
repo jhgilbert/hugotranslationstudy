@@ -7,7 +7,7 @@ tags:
 title: 'Everything Bagel: Complex Conversion Test'
 ---
 
-Isthay ocumentday essstray-eststay **ortcodesshay** andway Arkdownmay. Eesay ethay [eferenceray inklay][1] andway isthay inlineway inklay otay [Ugohay](httpsay://ohugogay.ioway).
+Isthay ocumentday essstray-eststay **ortcodesshay** andway Arkdownmay. Eesay ethay [eferenceray inklay][1] andway isthay inlineway inklay otay [Ugohay](https://gohugo.io).
 
 > Away ockquoteblay ithway away ortcodeshay insideway:
 >
@@ -57,7 +57,7 @@ Andway away eferenceray estylay inklay otay ethay [Ocsday][1].
 Oddlyway acedspay osingclay (ouldshay illstay airpay):
 
 {{< wrapper >}}
-Appedwray odybay ontentcay ithway _italicsway_ andway `inlineway odecay`.
+Appedwray odybay ontentcay ithway _italicsway_ andway `inline code`.
 {{<     /     wrapper    >}}
 
 ---
@@ -95,7 +95,7 @@ Insideway anelpay ithway away estednay angleway ortcodeshay:
 Away egularray istlay ithway inlineway ortcodesshay:
 
 - Eforebay {{< badge text="LIST" color="orange" >}} afterway.
-- Away econdsay ulletbay ithway **oldbay** andway `odecay`.
+- Away econdsay ulletbay ithway **oldbay** andway `code`.
 
 Away estednay istlay ithway ockblay ontentcay:
 
@@ -122,9 +122,9 @@ Away implesay abletay:
 
 Inlineway odecay ikelay `{{< not-a-shortcode >}}` ustmay **otnay** ebay onvertedcay.
 
-```ogay
-// Away encedfay odecay ockblay atthay *ookslay* ikelay ortcodesshay utbay isnway'tay:
-fmtay.Intlnpray("{{< fake shortcode >}} ouldshay emainray asway-isway")
+```go
+// A fenced code block that *looks* like shortcodes but isn't:
+fmt.Println("{{< fake shortcode >}} ouldshay emainray asway-isway")
 ```
 
-[1]: httpsay://wwway.ooglegay.omcay
+[1]: https://www.google.com

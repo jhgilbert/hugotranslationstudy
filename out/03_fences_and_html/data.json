@@ -1,0 +1,99 @@
+{
+  "sourcePath": "content/03_fences_and_html.md",
+  "frontMatter": {
+    "draft": false,
+    "title": "Code fences and raw HTML"
+  },
+  "contentRaw": "\n## Overview\n\nThis file contains \u003cspan id=\"some-span\"\u003eraw html\u003c/span\u003e and some code fences. There is also **bold text**.\n\n```javascript\nconsole.log(\"Hello world\")\n```\n\n\u003cdiv class=\"alert alert-info\"\u003eWhen in doubt, just ask \u003ca href=\"https://www.google.com\"\u003eGoogle\u003c/a\u003e!\u003cdiv\u003e",
+  "contentTokens": [
+    {
+      "type": "tText",
+      "val": "\n## Overview\n\nThis file contains \u003cspan id=\"some-span\"\u003eraw html\u003c/span\u003e and some code fences. There is also **bold text**.\n\n```javascript\nconsole.log(\"Hello world\")\n```\n\n\u003cdiv class=\"alert alert-info\"\u003eWhen in doubt, just ask \u003ca href=\"https://www.google.com\"\u003eGoogle\u003c/a\u003e!\u003cdiv\u003e",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n## "
+        },
+        {
+          "type": "text",
+          "val": "Overview"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "This file contains "
+        },
+        {
+          "type": "markup",
+          "val": "\u003cspan id=\"some-span\"\u003e"
+        },
+        {
+          "type": "text",
+          "val": "raw html"
+        },
+        {
+          "type": "markup",
+          "val": "\u003c/span\u003e"
+        },
+        {
+          "type": "text",
+          "val": " and some code fences. There is also "
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": "bold text"
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": "."
+        },
+        {
+          "type": "markup",
+          "val": "\n\n```javascript\nconsole.log(\"Hello world\")\n```\n\n\u003cdiv class=\"alert alert-info\"\u003e"
+        },
+        {
+          "type": "text",
+          "val": "When in doubt, just ask "
+        },
+        {
+          "type": "markup",
+          "val": "\u003ca href=\"https://www.google.com\"\u003e"
+        },
+        {
+          "type": "text",
+          "val": "Google"
+        },
+        {
+          "type": "markup",
+          "val": "\u003c/a\u003e"
+        },
+        {
+          "type": "text",
+          "val": "!"
+        },
+        {
+          "type": "markup",
+          "val": "\u003cdiv\u003e"
+        }
+      ]
+    }
+  ],
+  "contentTextSpans": [
+    {
+      "start": 0,
+      "end": 271,
+      "text": "\n## Overview\n\nThis file contains \u003cspan id=\"some-span\"\u003eraw html\u003c/span\u003e and some code fences. There is also **bold text**.\n\n```javascript\nconsole.log(\"Hello world\")\n```\n\n\u003cdiv class=\"alert alert-info\"\u003eWhen in doubt, just ask \u003ca href=\"https://www.google.com\"\u003eGoogle\u003c/a\u003e!\u003cdiv\u003e"
+    }
+  ]
+}

@@ -12,7 +12,45 @@
   "contentTokens": [
     {
       "type": "tText",
-      "val": "\nHello **world**!\n\nHere is a shortcode:\n\n"
+      "val": "\nHello **world**!\n\nHere is a shortcode:\n\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        },
+        {
+          "type": "text",
+          "val": "Hello "
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": "world"
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": "!"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Here is a shortcode:"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -32,7 +70,21 @@
     },
     {
       "type": "tText",
-      "val": "\n\nMore text after the shortcode.\n"
+      "val": "\n\nMore text after the shortcode.\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "More text after the shortcode."
+        },
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     }
   ],
   "contentTextSpans": [

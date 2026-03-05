@@ -12,6 +12,7 @@ import (
 	"unicode/utf8"
 
 	"hugotranslationstudy/internal/piglatin"
+	"hugotranslationstudy/internal/subtokenize"
 	"hugotranslationstudy/internal/tomarkdoc"
 
 	"github.com/gohugoio/hugo/parser/pageparser"
@@ -23,8 +24,9 @@ A token created by Hugo's pageparser package. For example,
 the opening punctuation of a shortcode becomes a token.
 */
 type Token struct {
-	Type  string `json:"type"`
-	Val   string `json:"val"`
+	Type      string                  `json:"type"`
+	Val       string                  `json:"val"`
+	Subtokens []subtokenize.Subtoken  `json:"subtokens,omitempty"`
 }
 
 type TextSpan struct {
@@ -165,9 +167,19 @@ func parseAndWriteJSON(srcPath, outDir string) (string, Output) {
 		val := string(valB)
 
 		tok := Token{
-			Type:  item.Type.String(),
-			Val:   val,
+			Type: item.Type.String(),
+			Val:  val,
 		}
+
+		if tok.Type == "tText" && len(valB) > 0 {
+			subs, err := subtokenize.Subtokenize(valB)
+			if err != nil {
+				log.Printf("warning: subtokenize failed: %v", err)
+			} else {
+				tok.Subtokens = subs
+			}
+		}
+
 		bodyTokens = append(bodyTokens, tok)
 
 		if tok.Type == "tText" && len(valB) > 0 {
@@ -216,6 +228,14 @@ func translateBodyUsingRanges(jsonPath string) string {
 
 	body := []byte(in.ContentRaw)
 
+	// Build a list of tText tokens (in order) to match with text spans
+	var tTextTokens []Token
+	for _, tok := range in.ContentTok {
+		if tok.Type == "tText" && len(tok.Val) > 0 {
+			tTextTokens = append(tTextTokens, tok)
+		}
+	}
+
 	for i := len(in.ContentTextSpans) - 1; i >= 0; i-- {
 		span := in.ContentTextSpans[i]
 		if span.Start < 0 || span.End < 0 || span.Start > span.End || span.End > len(body) {
@@ -225,8 +245,14 @@ func translateBodyUsingRanges(jsonPath string) string {
 			log.Fatalf("span not valid utf8 at %d..%d", span.Start, span.End)
 		}
 
-		original := string(body[span.Start:span.End])
-		translated := piglatin.ToPigLatin(original)
+		var translated string
+		if i < len(tTextTokens) && len(tTextTokens[i].Subtokens) > 0 {
+			// Use subtokens: translate only "text" subtokens, preserve "markup"
+			translated = translateWithSubtokens(tTextTokens[i].Subtokens)
+		} else {
+			// Fallback: translate the whole span
+			translated = piglatin.ToPigLatin(string(body[span.Start:span.End]))
+		}
 
 		before := append([]byte(nil), body[:span.Start]...)
 		after := append([]byte(nil), body[span.End:]...)
@@ -234,6 +260,19 @@ func translateBodyUsingRanges(jsonPath string) string {
 		body = append(body, after...)
 	}
 	return string(body)
+}
+
+// translateWithSubtokens translates only "text" subtokens and concatenates all.
+func translateWithSubtokens(subs []subtokenize.Subtoken) string {
+	var buf strings.Builder
+	for _, s := range subs {
+		if s.Type == "text" {
+			buf.WriteString(piglatin.ToPigLatin(s.Val))
+		} else {
+			buf.WriteString(s.Val)
+		}
+	}
+	return buf.String()
 }
 
 

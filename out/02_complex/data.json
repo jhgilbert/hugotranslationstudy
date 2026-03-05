@@ -13,7 +13,61 @@
   "contentTokens": [
     {
       "type": "tText",
-      "val": "\nThis document stress-tests **shortcodes** and Markdown. See the [reference link][1] and this inline link to [Hugo](https://gohugo.io).\n\n\u003e A blockquote with a shortcode inside:\n\u003e\n\u003e "
+      "val": "\nThis document stress-tests **shortcodes** and Markdown. See the [reference link][1] and this inline link to [Hugo](https://gohugo.io).\n\n\u003e A blockquote with a shortcode inside:\n\u003e\n\u003e ",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        },
+        {
+          "type": "text",
+          "val": "This document stress-tests "
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": "shortcodes"
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": " and Markdown. See the [reference link][1] and this inline link to "
+        },
+        {
+          "type": "markup",
+          "val": "["
+        },
+        {
+          "type": "text",
+          "val": "Hugo"
+        },
+        {
+          "type": "markup",
+          "val": "](https://gohugo.io)"
+        },
+        {
+          "type": "text",
+          "val": "."
+        },
+        {
+          "type": "markup",
+          "val": "\n\n\u003e "
+        },
+        {
+          "type": "text",
+          "val": "A blockquote with a shortcode inside:"
+        },
+        {
+          "type": "markup",
+          "val": "\n\u003e\n\u003e "
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -45,7 +99,53 @@
     },
     {
       "type": "tText",
-      "val": " and some **bold** text.\n\n---\n\n## 1. Standalone / open-only shortcodes (angle \u0026 percent)\n\nPlain paragraph before.\n\n"
+      "val": " and some **bold** text.\n\n---\n\n## 1. Standalone / open-only shortcodes (angle \u0026 percent)\n\nPlain paragraph before.\n\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": " "
+        },
+        {
+          "type": "text",
+          "val": "and some "
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": "bold"
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": " text."
+        },
+        {
+          "type": "markup",
+          "val": "\n\n---\n\n## "
+        },
+        {
+          "type": "text",
+          "val": "1. Standalone / open-only shortcodes (angle \u0026 percent)"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Plain paragraph before."
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -65,7 +165,21 @@
     },
     {
       "type": "tText",
-      "val": "\n\nInline usage: Text before "
+      "val": "\n\nInline usage: Text before ",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Inline usage: Text before"
+        },
+        {
+          "type": "markup",
+          "val": " "
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -97,7 +211,29 @@
     },
     {
       "type": "tText",
-      "val": " and after.\n\nPercent variant standalone:  \n"
+      "val": " and after.\n\nPercent variant standalone:  \n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": " "
+        },
+        {
+          "type": "text",
+          "val": "and after."
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Percent variant standalone:"
+        },
+        {
+          "type": "markup",
+          "val": "  \n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScWithMarkup",
@@ -129,7 +265,21 @@
     },
     {
       "type": "tText",
-      "val": "\n\nOdd spacing:  \n"
+      "val": "\n\nOdd spacing:  \n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Odd spacing:"
+        },
+        {
+          "type": "markup",
+          "val": "  \n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -145,7 +295,21 @@
     },
     {
       "type": "tText",
-      "val": "\n\nBack-to-back:  \n"
+      "val": "\n\nBack-to-back:  \n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Back-to-back:"
+        },
+        {
+          "type": "markup",
+          "val": "  \n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -189,7 +353,29 @@
     },
     {
       "type": "tText",
-      "val": "\n\n---\n\n## 2. Paired shortcodes (angle \u0026 percent) with bodies\n\nAngle with body:\n\n"
+      "val": "\n\n---\n\n## 2. Paired shortcodes (angle \u0026 percent) with bodies\n\nAngle with body:\n\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n\n---\n\n## "
+        },
+        {
+          "type": "text",
+          "val": "2. Paired shortcodes (angle \u0026 percent) with bodies"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Angle with body:"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -213,7 +399,37 @@
     },
     {
       "type": "tText",
-      "val": "\nThis **inside** text should be preserved verbatim.\n"
+      "val": "\nThis **inside** text should be preserved verbatim.\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        },
+        {
+          "type": "text",
+          "val": "This "
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": "inside"
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": " text should be preserved verbatim."
+        },
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -233,7 +449,21 @@
     },
     {
       "type": "tText",
-      "val": "\n\nPercent with body (Markdown-enabled):\n\n"
+      "val": "\n\nPercent with body (Markdown-enabled):\n\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Percent with body (Markdown-enabled):"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScWithMarkup",
@@ -257,7 +487,45 @@
     },
     {
       "type": "tText",
-      "val": "\nYou can put **Markdown** here, including a list:\n\n- Item A (with inline "
+      "val": "\nYou can put **Markdown** here, including a list:\n\n- Item A (with inline ",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        },
+        {
+          "type": "text",
+          "val": "You can put "
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": "Markdown"
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": " here, including a list:"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n- "
+        },
+        {
+          "type": "text",
+          "val": "Item A (with inline"
+        },
+        {
+          "type": "markup",
+          "val": " "
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -281,7 +549,41 @@
     },
     {
       "type": "tText",
-      "val": ")\n- Item B\n- Item C\n\nAnd a reference style link to the [Docs][1].\n"
+      "val": ")\n- Item B\n- Item C\n\nAnd a reference style link to the [Docs][1].\n",
+      "subtokens": [
+        {
+          "type": "text",
+          "val": ")"
+        },
+        {
+          "type": "markup",
+          "val": "\n- "
+        },
+        {
+          "type": "text",
+          "val": "Item B"
+        },
+        {
+          "type": "markup",
+          "val": "\n- "
+        },
+        {
+          "type": "text",
+          "val": "Item C"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "And a reference style link to the [Docs][1]."
+        },
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScWithMarkup",
@@ -301,7 +603,21 @@
     },
     {
       "type": "tText",
-      "val": "\n\nOddly spaced closing (should still pair):\n\n"
+      "val": "\n\nOddly spaced closing (should still pair):\n\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Oddly spaced closing (should still pair):"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -317,7 +633,45 @@
     },
     {
       "type": "tText",
-      "val": "\nWrapped body content with _italics_ and `inline code`.\n"
+      "val": "\nWrapped body content with _italics_ and `inline code`.\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        },
+        {
+          "type": "text",
+          "val": "Wrapped body content with "
+        },
+        {
+          "type": "markup",
+          "val": "_"
+        },
+        {
+          "type": "text",
+          "val": "italics"
+        },
+        {
+          "type": "markup",
+          "val": "_"
+        },
+        {
+          "type": "text",
+          "val": " and "
+        },
+        {
+          "type": "markup",
+          "val": "`inline code`"
+        },
+        {
+          "type": "text",
+          "val": "."
+        },
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -337,7 +691,29 @@
     },
     {
       "type": "tText",
-      "val": "\n\n---\n\n## 3. Nested shortcodes\n\nTabs with nested tab children:\n\n"
+      "val": "\n\n---\n\n## 3. Nested shortcodes\n\nTabs with nested tab children:\n\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n\n---\n\n## "
+        },
+        {
+          "type": "text",
+          "val": "3. Nested shortcodes"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Tabs with nested tab children:"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -353,7 +729,13 @@
     },
     {
       "type": "tText",
-      "val": "\n"
+      "val": "\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -377,7 +759,21 @@
     },
     {
       "type": "tText",
-      "val": "\nFirst tab body with an inline "
+      "val": "\nFirst tab body with an inline ",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        },
+        {
+          "type": "text",
+          "val": "First tab body with an inline"
+        },
+        {
+          "type": "markup",
+          "val": " "
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -401,7 +797,21 @@
     },
     {
       "type": "tText",
-      "val": " badge.\n"
+      "val": " badge.\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": " "
+        },
+        {
+          "type": "text",
+          "val": "badge."
+        },
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -421,7 +831,13 @@
     },
     {
       "type": "tText",
-      "val": "\n\n"
+      "val": "\n\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -445,7 +861,29 @@
     },
     {
       "type": "tText",
-      "val": "\nSecond tab body.\n\nNested box:\n"
+      "val": "\nSecond tab body.\n\nNested box:\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        },
+        {
+          "type": "text",
+          "val": "Second tab body."
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Nested box:"
+        },
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -469,7 +907,21 @@
     },
     {
       "type": "tText",
-      "val": "\nDeep content.\n"
+      "val": "\nDeep content.\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        },
+        {
+          "type": "text",
+          "val": "Deep content."
+        },
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -489,7 +941,13 @@
     },
     {
       "type": "tText",
-      "val": "\n"
+      "val": "\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -509,7 +967,13 @@
     },
     {
       "type": "tText",
-      "val": "\n"
+      "val": "\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -529,7 +993,21 @@
     },
     {
       "type": "tText",
-      "val": "\n\nMixed delimiters (percent outer, angle inner):\n\n"
+      "val": "\n\nMixed delimiters (percent outer, angle inner):\n\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Mixed delimiters (percent outer, angle inner):"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScWithMarkup",
@@ -553,7 +1031,21 @@
     },
     {
       "type": "tText",
-      "val": "\nInside panel with a nested angle shortcode:\n"
+      "val": "\nInside panel with a nested angle shortcode:\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        },
+        {
+          "type": "text",
+          "val": "Inside panel with a nested angle shortcode:"
+        },
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -577,7 +1069,13 @@
     },
     {
       "type": "tText",
-      "val": "\n"
+      "val": "\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScWithMarkup",
@@ -597,7 +1095,37 @@
     },
     {
       "type": "tText",
-      "val": "\n\n---\n\n## 4. Lists, reference links, images, and tables\n\nA regular list with inline shortcodes:\n\n- Before "
+      "val": "\n\n---\n\n## 4. Lists, reference links, images, and tables\n\nA regular list with inline shortcodes:\n\n- Before ",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n\n---\n\n## "
+        },
+        {
+          "type": "text",
+          "val": "4. Lists, reference links, images, and tables"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "A regular list with inline shortcodes:"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n- "
+        },
+        {
+          "type": "text",
+          "val": "Before"
+        },
+        {
+          "type": "markup",
+          "val": " "
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -629,7 +1157,77 @@
     },
     {
       "type": "tText",
-      "val": " after.\n- A second bullet with **bold** and `code`.\n\nA nested list with block content:\n\n- Parent\n  - Child with standalone shortcode:\n"
+      "val": " after.\n- A second bullet with **bold** and `code`.\n\nA nested list with block content:\n\n- Parent\n  - Child with standalone shortcode:\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": " "
+        },
+        {
+          "type": "text",
+          "val": "after."
+        },
+        {
+          "type": "markup",
+          "val": "\n- "
+        },
+        {
+          "type": "text",
+          "val": "A second bullet with "
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": "bold"
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": " and "
+        },
+        {
+          "type": "markup",
+          "val": "`code`"
+        },
+        {
+          "type": "text",
+          "val": "."
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "A nested list with block content:"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n- "
+        },
+        {
+          "type": "text",
+          "val": "Parent"
+        },
+        {
+          "type": "markup",
+          "val": "\n  - "
+        },
+        {
+          "type": "text",
+          "val": "Child with standalone shortcode:"
+        },
+        {
+          "type": "markup",
+          "val": "\n"
+        }
+      ]
     },
     {
       "type": "tIndentation",
@@ -657,7 +1255,85 @@
     },
     {
       "type": "tText",
-      "val": "\n\nReference-style links and images:\n\nHere is a reference link to the [documentation][1], and a reference image:  \n![Scenic Pic][hero-img]\n\nA simple table:\n\n| Feature   | Value                   |\n| --------- | ----------------------- |\n| Bold      | **yes**                 |\n| Shortcode | "
+      "val": "\n\nReference-style links and images:\n\nHere is a reference link to the [documentation][1], and a reference image:  \n![Scenic Pic][hero-img]\n\nA simple table:\n\n| Feature   | Value                   |\n| --------- | ----------------------- |\n| Bold      | **yes**                 |\n| Shortcode | ",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Reference-style links and images:"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Here is a reference link to the [documentation][1], and a reference image:"
+        },
+        {
+          "type": "markup",
+          "val": "  \n"
+        },
+        {
+          "type": "text",
+          "val": "![Scenic Pic][hero-img]"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "A simple table:"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n| "
+        },
+        {
+          "type": "text",
+          "val": "Feature"
+        },
+        {
+          "type": "markup",
+          "val": "   | "
+        },
+        {
+          "type": "text",
+          "val": "Value"
+        },
+        {
+          "type": "markup",
+          "val": "                   |\n| --------- | ----------------------- |\n| "
+        },
+        {
+          "type": "text",
+          "val": "Bold"
+        },
+        {
+          "type": "markup",
+          "val": "      | **"
+        },
+        {
+          "type": "text",
+          "val": "yes"
+        },
+        {
+          "type": "markup",
+          "val": "**                 |\n| "
+        },
+        {
+          "type": "text",
+          "val": "Shortcode"
+        },
+        {
+          "type": "markup",
+          "val": " | "
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -681,7 +1357,41 @@
     },
     {
       "type": "tText",
-      "val": " |\n| Link      | [Hugo][1]               |\n\n---\n\n## 5. Code fences \u0026 inline code (should be untouched)\n\nInline code like `"
+      "val": " |\n| Link      | [Hugo][1]               |\n\n---\n\n## 5. Code fences \u0026 inline code (should be untouched)\n\nInline code like `",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": " "
+        },
+        {
+          "type": "text",
+          "val": "|"
+        },
+        {
+          "type": "markup",
+          "val": "\n"
+        },
+        {
+          "type": "text",
+          "val": "| Link      | [Hugo][1]               |"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n---\n\n## "
+        },
+        {
+          "type": "text",
+          "val": "5. Code fences \u0026 inline code (should be untouched)"
+        },
+        {
+          "type": "markup",
+          "val": "\n\n"
+        },
+        {
+          "type": "text",
+          "val": "Inline code like `"
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -697,7 +1407,33 @@
     },
     {
       "type": "tText",
-      "val": "` must **not** be converted.\n\n```go\n// A fenced code block that *looks* like shortcodes but isn't:\nfmt.Println(\""
+      "val": "` must **not** be converted.\n\n```go\n// A fenced code block that *looks* like shortcodes but isn't:\nfmt.Println(\"",
+      "subtokens": [
+        {
+          "type": "text",
+          "val": "` must "
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": "not"
+        },
+        {
+          "type": "markup",
+          "val": "**"
+        },
+        {
+          "type": "text",
+          "val": " be converted."
+        },
+        {
+          "type": "markup",
+          "val": "\n\n```go\n// A fenced code block that *looks* like shortcodes but isn't:\nfmt.Println(\""
+        }
+      ]
     },
     {
       "type": "tLeftDelimScNoMarkup",
@@ -717,7 +1453,21 @@
     },
     {
       "type": "tText",
-      "val": " should remain as-is\")\n```\n\n[1]: https://www.google.com\n"
+      "val": " should remain as-is\")\n```\n\n[1]: https://www.google.com\n",
+      "subtokens": [
+        {
+          "type": "markup",
+          "val": " "
+        },
+        {
+          "type": "text",
+          "val": "should remain as-is\")"
+        },
+        {
+          "type": "markup",
+          "val": "\n```\n\n[1]: https://www.google.com\n"
+        }
+      ]
     }
   ],
   "contentTextSpans": [
